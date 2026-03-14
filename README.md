@@ -24,6 +24,10 @@ A web service designed to link and consolidate customer contact information acro
 
 ## 🔌 API Usage
 
+### Live Endpoint
+The API is live and hosted on Render! You can test it by sending `POST` requests directly to:
+**`https://assignment-identity-reconciliation.onrender.com/identify`**
+
 ### `POST /identify`
 
 The service exposes a single endpoint that accepts customer contact information and returns their consolidated identity profile.
