@@ -22,18 +22,23 @@ A web service designed to link and consolidate customer contact information acro
 
 ---
 
-## 🔌 API Usage
+## 🚀 Live Endpoint
 
-### Live Endpoint
-The API is live and hosted on Render! You can test it by sending `POST` requests directly to:
-**`https://assignment-identity-reconciliation.onrender.com/identify`**
+The API is deployed and live on Render.
 
-### `POST /identify`
+**Base URL**: `https://assignment-identity-reconciliation.onrender.com`
 
-The service exposes a single endpoint that accepts customer contact information and returns their consolidated identity profile.
+**Identity Reconciliation Endpoint**:
+`POST /identify`
 
-**Request Body**
-Accepts a JSON payload containing either an `email`, a `phoneNumber`, or both.
+**Full Endpoint**: 
+`https://assignment-identity-reconciliation.onrender.com/identify`
+
+---
+
+## 📝 Request Body
+
+The endpoint accepts a JSON payload containing either an `email`, a `phoneNumber`, or both.
 
 ```json
 {
@@ -42,13 +47,20 @@ Accepts a JSON payload containing either an `email`, a `phoneNumber`, or both.
 }
 ```
 
-**Response Payload**
-Returns the consolidated contact details.
-- `primaryContatctId`: The ID of the oldest contact in the linked cluster.
-- `emails`: An array of all emails in the cluster (primary email first).
-- `phoneNumbers`: An array of all phone numbers in the cluster (primary phone first).
-- `secondaryContactIds`: An array of all secondary contact IDs linked to the primary.
+*Make sure to send the request with the header:* `Content-Type: application/json`
 
+---
+
+## 📤 Response Payload
+
+The API returns the consolidated identity of the customer.
+
+- **`primaryContatctId`** – ID of the oldest primary contact
+- **`emails`** – All emails linked to the contact (primary first)
+- **`phoneNumbers`** – All phone numbers linked to the contact (primary first)
+- **`secondaryContactIds`** – IDs of secondary contacts linked to the primary
+
+**Example Response:**
 ```json
 {
   "contact": {
@@ -67,8 +79,27 @@ Returns the consolidated contact details.
 }
 ```
 
-### Business Logic Behavior
-- **New Customer:** Creates a new primary contact.
-- **Returning Customer (Matching Data):** Returns the consolidated profile without creating new rows.
-- **New Contact Info:** If a match is found but new info is provided (e.g., new email with old phone), it creates a secondary contact linked to the primary.
-- **Account Merging:** If a request links two entirely separate profiles, the older profile remains primary, and the newer profile is demoted to a secondary contact.
+---
+
+## 🧠 Business Logic Behavior
+
+- **New Customer**: Creates a new primary contact.
+- **Returning Customer (Matching Data)**: Returns the existing consolidated profile without creating new rows.
+- **New Contact Information**: If an existing contact matches but the request includes new data (e.g., new email with existing phone), a new secondary contact is created and linked to the primary.
+- **Account Merging**: If a request links two separate profiles, the older contact remains primary, and the newer one becomes a secondary contact.
+
+---
+
+## 🧪 Testing the API
+
+You can test the endpoint using:
+1. Postman
+2. Browser Console (`fetch` request)
+3. `curl`
+
+**Example using curl:**
+```bash
+curl -X POST https://assignment-identity-reconciliation.onrender.com/identify \
+-H "Content-Type: application/json" \
+-d '{"email":"mcfly@hillvalley.edu","phoneNumber":"123456"}'
+```
